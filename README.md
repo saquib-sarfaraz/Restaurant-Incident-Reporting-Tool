@@ -40,9 +40,7 @@
 
 ## 🚀 Live Demo
 
-- Frontend URL: _Add Frontend Deployment Link_
-- Backend URL: _Add Backend Deployment Link_
-- GitHub Repository: _Add Repo Link_
+- Frontend URL: https://restaurant-incident-reporting-tool-lemon.vercel.app/
 
 ---
 
@@ -348,16 +346,7 @@ GET /api/incidents?search=POS
 - Audit logs for compliance
 - Advanced analytics + forecasting
 
----
 
-## 👤 Author
-
-**Saquib Sarfaraz**  
-B.Tech Computer Science Engineering — Jamia Hamdard
-
-- GitHub: _Add your GitHub URL_
-- LinkedIn: _Add your LinkedIn URL_
-- Portfolio: _Add your portfolio URL_
 
 ---
 

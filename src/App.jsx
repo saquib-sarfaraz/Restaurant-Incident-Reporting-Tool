@@ -2,24 +2,35 @@ import React, { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import StaffDashboard from './pages/StaffDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
-import NotificationHud from './components/NotificationHud';
-import { INITIAL_CYBER_INCIDENTS } from './data/cyberMockData';
+import NotificationPanel from './components/NotificationPanel';
+import { api } from './services/api';
 
 function App() {
-  // 1. Roles Clearance State
+  // 1. User role Clearance State
   const [userRole, setUserRole] = useState(null);
+  const [userName, setUserName] = useState("anonymous");
 
-  // 2. State-backed Operational Database
-  const [incidents, setIncidents] = useState(INITIAL_CYBER_INCIDENTS);
+  // Theme preference coordination state
+  const [theme, setTheme] = useState('dark');
 
-  // 3. HUD Notifications Queue
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.add('dark');
+    root.classList.remove('light');
+    localStorage.setItem('theme', 'dark');
+  }, []);
+
+  // 2. State-backed Incidents Database
+  const [incidents, setIncidents] = useState([]);
+
+  // 3. Real-Time HUD Alerts Queue
   const [notifications, setNotifications] = useState([]);
 
   // Auto-dismiss HUD alerts after 5 seconds
   useEffect(() => {
     if (notifications.length > 0) {
       const timer = setTimeout(() => {
-        // Dismiss oldest toast
+        // Dismiss oldest alert
         setNotifications(prev => prev.slice(1));
       }, 5000);
       return () => clearTimeout(timer);
@@ -40,89 +51,93 @@ function App() {
   };
 
   // Handlers
-  const handleLogin = (role) => {
+  const handleLogin = async (role) => {
     setUserRole(role);
-    const label = role === 'manager' ? 'Operations Manager (Sarah Johnson)' : 'Store Staff (Alex Carter)';
+    const nextName = role === "manager" ? "Sarah Johnson" : "Alex";
+    setUserName(nextName);
+    const label = role === 'manager' ? 'Operations Manager (Sarah)' : 'Store Staff (Alex)';
     triggerNotification(
-      "Decryption Successful", 
-      `Security handshake granted for ${label}. Clearance level: Active.`, 
+      "Clearance Granted", 
+      `Logged in successfully as ${label}. Active session established.`, 
       "success"
     );
+
+    try {
+      const list = await api.fetchIncidents(role, nextName);
+      setIncidents(list);
+      triggerNotification("Sync Complete", `Loaded ${list.length} incidents from backend.`, "info");
+    } catch (err) {
+      triggerNotification("Backend Sync Failed", err?.message || "Failed to load incidents.", "danger");
+    }
   };
 
   const handleLogout = () => {
     setUserRole(null);
+    setUserName("anonymous");
+    setIncidents([]);
     triggerNotification(
-      "Socket Terminated", 
-      "Operational node connection closed successfully. Good bye.", 
+      "Session Terminated", 
+      "Operational session closed standardly. Node offline.", 
       "warning"
     );
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setIncidents(prevIncidents => 
-      prevIncidents.map(inc => 
-        inc.id === id 
-          ? { 
-              ...inc, 
-              status: newStatus,
-              timelineProgress: inc.timelineProgress.includes(newStatus) 
-                ? inc.timelineProgress 
-                : [...inc.timelineProgress, newStatus] 
-            } 
-          : inc
-      )
-    );
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      const updated = await api.updateIncidentStatus(id, { status: newStatus }, userRole, userName);
+      if (updated) {
+        setIncidents(prev => prev.map(inc => (inc.id === id ? { ...inc, ...updated } : inc)));
+      }
 
-    const alertType = newStatus === 'Resolved' ? 'success' : 'info';
-    triggerNotification(
-      "Workflow Telemetry Updated", 
-      `Incident ${id} status has been shifted to '${newStatus}'.`, 
-      alertType
-    );
+      const alertType = newStatus === 'Resolved' ? 'success' : 'info';
+      triggerNotification(
+        "Incident Progress Updated",
+        `Incident ${id} workflow has shifted to '${newStatus}'.`,
+        alertType
+      );
+    } catch (err) {
+      triggerNotification("Status Update Failed", err?.message || "Failed to update status.", "danger");
+    }
   };
 
-  const handleUpdateIncident = (updatedPayload) => {
-    setIncidents(prevIncidents =>
-      prevIncidents.map(inc =>
-        inc.id === updatedPayload.id ? updatedPayload : inc
-      )
-    );
-    triggerNotification(
-      "Log Record Overridden", 
-      `Incident ${updatedPayload.id} overrides have been saved by Operations Manager.`, 
-      "success"
-    );
+  const handleUpdateIncident = async (updatedPayload) => {
+    try {
+      const saved = await api.updateIncident(updatedPayload.id, updatedPayload, userRole, userName);
+      if (saved) {
+        setIncidents(prev => prev.map(inc => (inc.id === saved.id ? { ...inc, ...saved } : inc)));
+      }
+      triggerNotification("Incident Record Updated", `Incident ${updatedPayload.id} changes committed.`, "success");
+    } catch (err) {
+      triggerNotification("Update Failed", err?.message || "Failed to update incident.", "danger");
+    }
   };
 
-  const handleSubmitIncident = (newIncident) => {
-    // Determine next ID
-    const count = incidents.length + 1;
-    const nextId = `INC-2048-${String(count).padStart(3, '0')}`;
-    
-    const formattedIncident = {
-      ...newIncident,
-      id: nextId
-    };
-
-    setIncidents(prev => [formattedIncident, ...prev]);
-    
-    // Trigger alarms matching severity
-    const alertType = newIncident.severity === 'Critical' ? 'danger' : 'warning';
-    triggerNotification(
-      `Alarms Triggered: ${newIncident.severity} Severity`, 
-      `New ${newIncident.category} logged at ${newIncident.store}. Dispatched to review board.`, 
-      alertType
-    );
+  const handleSubmitIncident = async (newIncident) => {
+    try {
+      const created = await api.createIncident(newIncident, userRole, userName);
+      if (created) {
+        setIncidents(prev => [created, ...prev]);
+        const alertType = created.severity === 'Critical' ? 'danger' : 'warning';
+        triggerNotification(
+          `New Incident: ${created.severity}`,
+          `A new ${created.category} has been logged at ${created.store}.`,
+          alertType
+        );
+      }
+      return created;
+    } catch (err) {
+      triggerNotification("Submission Failed", err?.message || "Failed to submit incident.", "danger");
+      throw err;
+    }
   };
 
-  const handleCloseNotification = (id) => {
+  const handleClearNotification = (id) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   };
 
   return (
     <>
-      {/* Dynamic role rendering */}
+      {/* Dynamic role clearance view switcher */}
       {userRole === null && (
         <Login onLogin={handleLogin} />
       )}
@@ -130,26 +145,28 @@ function App() {
       {userRole === 'staff' && (
         <StaffDashboard 
           incidents={incidents}
+          notifications={notifications}
+          onClearNotification={handleClearNotification}
           onStatusChange={handleStatusChange}
           onSubmitIncident={handleSubmitIncident}
           onLogout={handleLogout}
+          theme={theme}
+          setTheme={setTheme}
         />
       )}
 
       {userRole === 'manager' && (
         <ManagerDashboard 
           incidents={incidents}
+          notifications={notifications}
+          onClearNotification={handleClearNotification}
           onStatusChange={handleStatusChange}
           onUpdateIncident={handleUpdateIncident}
           onLogout={handleLogout}
+          theme={theme}
+          setTheme={setTheme}
         />
       )}
-
-      {/* Floating HUD Warnings */}
-      <NotificationHud 
-        notifications={notifications} 
-        onCloseNotification={handleCloseNotification} 
-      />
     </>
   );
 }

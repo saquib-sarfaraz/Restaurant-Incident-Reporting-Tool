@@ -1,186 +1,201 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HiLocationMarker, HiClock, HiCheckCircle, HiExclamationCircle, HiPlay, HiChevronDown, HiSparkles, HiClipboardList } from 'react-icons/hi';
+import { HiLocationMarker, HiClock, HiCheckCircle, HiUserCircle, HiChevronDown, HiSparkles, HiClipboardCheck } from 'react-icons/hi';
 
 export default function IncidentCard({ incident, onStatusChange }) {
   const [expanded, setExpanded] = useState(false);
 
-  // Styling helper for severity badges
-  const getSeverityStyle = (severity) => {
-    switch (severity) {
-      case 'Critical':
-        return 'bg-red-500/20 text-red-400 border border-red-500/30';
-      case 'High':
-        return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
-      case 'Medium':
-        return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
-      default:
-        return 'bg-slate-500/20 text-slate-400 border border-slate-500/30';
-    }
-  };
-
-  // Styling helper for status badge
+  // Status Styling Utilities
   const getStatusStyle = (status) => {
     switch (status) {
       case 'Resolved':
-        return 'bg-green-500/10 text-green-400 border border-green-500/20';
+        return 'bg-emerald-500/10 text-emerald-555 dark:text-emerald-400 border-emerald-500/25';
       case 'In Progress':
-        return 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20';
+        return 'bg-cyan-500/10 text-cyan-555 dark:text-cyan-400 border-cyan-500/25';
+      case 'Under Review':
+        return 'bg-indigo-500/10 text-indigo-555 dark:text-indigo-400 border-indigo-500/25';
       default:
-        return 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+        return 'bg-amber-500/10 text-amber-555 dark:text-amber-400 border-amber-500/25';
     }
   };
 
-  // Helper for dynamic card glowing left-border matching severity
-  const getCardBorderGlow = (severity) => {
+  // Severity Styling Utilities
+  const getSeverityStyle = (severity) => {
     switch (severity) {
       case 'Critical':
-        return 'border-l-4 border-l-red-500';
+        return 'bg-red-500/10 text-red-555 dark:text-red-400 border border-red-500/20';
       case 'High':
-        return 'border-l-4 border-l-amber-500';
+        return 'bg-amber-500/10 text-amber-555 dark:text-amber-400 border border-amber-500/20';
       case 'Medium':
-        return 'border-l-4 border-l-blue-500';
+        return 'bg-indigo-500/10 text-indigo-555 dark:text-indigo-400 border border-indigo-500/20';
       default:
-        return 'border-l-4 border-l-slate-500';
+        return 'bg-bg-saas border border-border-saas text-text-muted';
     }
   };
 
   return (
     <motion.div
       layout
-      whileHover={{ y: -4, scale: 1.005 }}
-      className={`w-full rounded-2xl glass-panel border border-slate-800/80 transition-all duration-300 hover:shadow-lg hover:shadow-violet-950/10 ${getCardBorderGlow(incident.severity)}`}
+      whileHover={{ y: -2 }}
+      className="w-full rounded-2xl bg-card-saas border border-border-saas hover:border-[#6366F1]/25 transition-all duration-300 shadow-sm overflow-hidden"
     >
-      {/* Upper Main Card Part */}
+      {/* Upper Log Bar */}
       <div className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         
-        {/* Left Side: Category, Title & Store */}
+        {/* Left: Category, Title & Store details */}
         <div className="flex-1 space-y-2.5 text-left">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-extrabold uppercase bg-slate-900 border border-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full tracking-wider">
+            <span className="text-[9px] font-extrabold uppercase bg-bg-saas border border-border-saas text-text-muted px-2.5 py-0.5 rounded-full tracking-wider font-mono">
+              {incident.id}
+            </span>
+            <span className="text-[9px] font-extrabold uppercase bg-bg-saas/40 border border-border-saas text-text-main px-2.5 py-0.5 rounded-full tracking-wider">
               {incident.category}
             </span>
-            <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider ${getSeverityStyle(incident.severity)}`}>
+            <span className={`text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded-full tracking-wider ${getSeverityStyle(incident.severity)}`}>
               {incident.severity}
             </span>
           </div>
 
-          <h3 className="font-display font-bold text-base sm:text-lg text-slate-100 tracking-wide line-clamp-1">
+          <h4 className="font-display font-bold text-text-main text-sm sm:text-base tracking-wide line-clamp-1">
             {incident.title}
-          </h3>
+          </h4>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
-            <div className="flex items-center gap-1">
-              <HiLocationMarker className="w-4 h-4 text-violet-400 shrink-0" />
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-text-muted">
+            <div className="flex items-center gap-1.5">
+              <HiLocationMarker className="w-4 h-4 text-[#6366F1] shrink-0" />
               <span>{incident.store}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <HiClock className="w-4 h-4 text-slate-500 shrink-0" />
+            <div className="flex items-center gap-1.5">
+              <HiClock className="w-4 h-4 text-text-muted/70 shrink-0" />
               <span>Reported {incident.reportedTime}</span>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Status and Expand controls */}
-        <div className="flex items-center justify-between md:justify-end gap-3 border-t md:border-t-0 border-slate-800/60 pt-3 md:pt-0">
+        {/* Right: Assigned Manager, Workflow status & expandable controls */}
+        <div className="flex items-center justify-between md:justify-end gap-4 border-t md:border-t-0 border-border-saas pt-3.5 md:pt-0">
           
-          {/* Quick status picker drop down */}
-          <div className="flex flex-col items-start md:items-end">
-            <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest mb-1">
+          {/* Status badge */}
+          <div className="text-left md:text-right">
+            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block mb-1">
               Workflow Status
             </span>
-            <select
-              value={incident.status}
-              onChange={(e) => onStatusChange(incident.id, e.target.value)}
-              className={`text-xs font-bold px-3 py-1 rounded-xl focus:outline-none cursor-pointer border hover:opacity-90 transition-all appearance-none pr-6 relative ${getStatusStyle(incident.status)}`}
-              style={{
-                background: 'rgba(15, 23, 42, 0.4)',
-                backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27%23a78bfa%27%3E%3Cpath d=%27M7 10l5 5 5-5z%27/%3E%3C/svg%3E")',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 4px center',
-                backgroundSize: '16px'
-              }}
-            >
-              <option value="Open" className="bg-slate-900 text-amber-400 font-bold">Open</option>
-              <option value="In Progress" className="bg-slate-900 text-cyan-400 font-bold">In Progress</option>
-              <option value="Resolved" className="bg-slate-900 text-green-400 font-bold">Resolved</option>
-            </select>
+            <span className={`text-[10px] font-bold px-3 py-1 rounded-full border ${getStatusStyle(incident.status)}`}>
+              {incident.status}
+            </span>
           </div>
 
-          {/* Details toggle button */}
-          <motion.button
+          {/* Toggle details drawer */}
+          <button
             onClick={() => setExpanded(!expanded)}
-            className="p-2.5 rounded-xl bg-slate-900/50 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-violet-500/30 transition-all cursor-pointer mt-4 md:mt-0 flex items-center gap-1.5"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="p-2 rounded-xl bg-bg-saas border border-border-saas text-text-muted hover:text-text-main cursor-pointer flex items-center gap-1 mt-3 md:mt-0 transition-all hover:border-[#6366F1]/20 hover:bg-surface-saas"
           >
-            <span className="text-xs font-medium">Details</span>
-            <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-              <HiChevronDown className="w-4 h-4 text-violet-400" />
+            <span className="text-[11px] font-bold">Details</span>
+            <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.15 }}>
+              <HiChevronDown className="w-4 h-4 text-[#6366F1]" />
             </motion.div>
-          </motion.button>
+          </button>
         </div>
+
       </div>
 
-      {/* Expanded drawer for description, action steps, AI diagnostic */}
+      {/* Expandable drawers panel */}
       <AnimatePresence>
         {expanded && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-slate-800/80 bg-slate-950/40 rounded-b-2xl"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden border-t border-border-saas bg-bg-saas/20"
           >
-            <div className="p-5 space-y-4 text-left">
-              {/* Description paragraph */}
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block font-display">
-                  Incident Description
+            <div className="p-5 space-y-5 text-left">
+              
+              {/* Detailed Description */}
+              <div className="space-y-1.5">
+                <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block font-display">
+                  Incident description report
                 </span>
-                <p className="text-sm text-slate-300 leading-relaxed font-sans">
+                <p className="text-xs sm:text-sm text-text-main leading-relaxed font-sans font-medium">
                   {incident.description}
                 </p>
               </div>
 
-              {/* Grid: AI Assist & Action Plan */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
-                {/* AI Assistant Diagnostics Card */}
-                {incident.aiSummary && (
-                  <div className="p-4.5 rounded-xl bg-violet-600/5 border border-violet-500/15 flex flex-col gap-2 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-violet-500/5 rounded-full filter blur-xl pointer-events-none" />
-                    <div className="flex items-center gap-1.5 text-violet-400 font-semibold text-xs">
-                      <HiSparkles className="w-4.5 h-4.5 text-violet-400 animate-pulse" />
-                      <span className="font-display tracking-wide">AI Co-Pilot Diagnosis</span>
+              {/* Progress timeline visual progress indicators */}
+              <div className="space-y-3 pt-3 border-t border-border-saas">
+                <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block font-display">
+                  Incident Progression Timeline
+                </span>
+                
+                {/* Horizontal timelines */}
+                <div className="flex items-center justify-between w-full max-w-xl mt-4 relative before:absolute before:left-3 before:right-3 before:top-2.5 before:h-[2px] before:bg-border-saas">
+                  {["Reported", "Under Review", "In Progress", "Resolved"].map((step, idx) => {
+                    const isCompleted = incident.status === 'Resolved' || 
+                      (incident.status === 'In Progress' && step !== 'Resolved') ||
+                      (incident.status === 'Under Review' && (step === 'Reported' || step === 'Under Review')) ||
+                      (incident.status === 'Open' && step === 'Reported');
+                    
+                    const isActive = (incident.status === step) || (incident.status === 'Open' && step === 'Reported');
+
+                    return (
+                      <div key={step} className="flex flex-col items-center relative z-10 text-[9px] sm:text-[10px]">
+                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center font-bold text-[9px] transition-all duration-300 ${
+                          isActive 
+                            ? 'bg-[#6366F1] text-white border-[#6366F1]/30 shadow-md shadow-indigo-900/30' 
+                            : isCompleted 
+                              ? 'bg-bg-saas text-[#6366F1] border-border-saas' 
+                              : 'bg-card-saas text-text-muted border-border-saas'
+                        }`}>
+                          {isCompleted ? "✓" : idx + 1}
+                        </div>
+                        <span className={`mt-1.5 font-bold ${
+                          isActive ? 'text-[#6366F1]' : isCompleted ? 'text-text-main' : 'text-text-muted'
+                        }`}>
+                          {step}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Sub-grid of Coordinator & AI highlights */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-border-saas">
+                {/* Coordinator notes */}
+                {incident.resolutionNotes && (
+                  <div className="p-4 rounded-xl bg-bg-saas/40 border border-border-saas text-left space-y-1">
+                    <div className="flex items-center gap-1.5 text-cyan-550 dark:text-cyan-400 font-bold text-xs font-display">
+                      <HiUserCircle className="w-4 h-4 text-cyan-500" />
+                      <span>Manager Resolution Log</span>
                     </div>
-                    <p className="text-xs text-slate-400 leading-relaxed italic">
+                    <p className="text-xs text-text-muted leading-relaxed font-medium font-sans">
+                      {incident.resolutionNotes}
+                    </p>
+                    <span className="text-[10px] text-text-muted block pt-1.5">
+                      Assigned Manager: <strong className="text-text-main">{incident.assignedManager || "Unassigned"}</strong>
+                    </span>
+                  </div>
+                )}
+
+                {/* AI Summary diagnostics */}
+                {incident.aiSummary && (
+                  <div className="p-4 rounded-xl bg-[#6366F1]/5 border border-[#6366F1]/10 text-left space-y-1 relative">
+                    <div className="flex items-center gap-1.5 text-[#6366F1] font-bold text-xs font-display">
+                      <HiSparkles className="w-4 h-4 text-[#6366F1] animate-pulse" />
+                      <span>Co-Pilot Diagnostic Analysis</span>
+                    </div>
+                    <p className="text-xs text-text-muted leading-relaxed font-sans italic">
                       "{incident.aiSummary}"
                     </p>
                   </div>
                 )}
-
-                {/* Recommended Action Checklist */}
-                {incident.actionPlan && (
-                  <div className="p-4.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col gap-2">
-                    <div className="flex items-center gap-1.5 text-slate-300 font-semibold text-xs">
-                      <HiClipboardList className="w-4.5 h-4.5 text-cyan-400" />
-                      <span className="font-display tracking-wide">Recommended Recovery Playbook</span>
-                    </div>
-                    <ul className="space-y-1.5">
-                      {incident.actionPlan.map((action, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-slate-400">
-                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
-                          <span>{action}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
+
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
     </motion.div>
   );
 }

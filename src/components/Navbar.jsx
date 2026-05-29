@@ -1,152 +1,117 @@
 import React, { useState } from 'react';
-import { HiShieldCheck, HiBell, HiSearch, HiOutlineAdjustments, HiUserCircle } from 'react-icons/hi';
+import { HiShieldCheck, HiSearch, HiBell, HiOutlineLogout, HiChevronDown } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
+import NotificationPanel from './NotificationPanel';
 
-export default function Navbar({ searchFilter, setSearchFilter, openIncidentsCount, criticalIncidentsCount, activeIncidents = [] }) {
+export default function Navbar({ 
+  searchQuery, 
+  setSearchQuery, 
+  notifications = [], 
+  onClearNotification, 
+  profile, 
+  onLogout,
+  onOpenProfile
+}) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
 
+  // Count active warnings/critical alerts
+  const criticalCount = notifications.filter(n => n.type === 'danger' || n.type === 'critical').length;
+
   return (
-    <header className="sticky top-0 z-50 w-full glass-panel px-4 lg:px-8 py-3 flex items-center justify-between border-b border-slate-800/80 backdrop-blur-md">
-      {/* Brand logo */}
-      <div className="flex items-center gap-3">
-        <motion.div 
-          className="p-2 bg-violet-600/20 border border-violet-500/30 rounded-xl flex items-center justify-center text-violet-400"
-          whileHover={{ scale: 1.05, rotate: 5 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <HiShieldCheck className="w-6 h-6 text-violet-500" />
-        </motion.div>
-        <div>
-          <span className="font-display font-bold text-lg tracking-wider bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
-            INCIDENT HUB
-          </span>
-          <span className="block text-[10px] text-violet-400 font-semibold tracking-widest uppercase">
-            RESTAURANT CHAIN CONTROLLER
-          </span>
+    <header className="sticky top-0 z-40 w-full bg-bg-saas/80 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex items-center justify-between border-b border-border-saas">
+      
+      {/* Brand Logo (Visible only on mobile/tablet when sidebar is hidden) */}
+      <div className="flex lg:hidden items-center gap-2">
+        <div className="p-1.5 bg-[#6366F1]/10 border border-[#6366F1]/20 rounded-lg text-[#6366F1]">
+          <HiShieldCheck className="w-5 h-5" />
         </div>
+        <span className="font-display font-black text-sm tracking-wide text-text-main">
+          Incident Hub
+        </span>
       </div>
 
-      {/* Center: Search Bar */}
+      {/* Central Search (SaaS Style) */}
       <div className="hidden md:flex items-center flex-1 max-w-md mx-8 relative">
-        <div className={`w-full relative flex items-center rounded-xl transition-all duration-300 ${searchFocused ? 'ring-2 ring-violet-500/50 bg-slate-900' : 'bg-slate-900/50 border border-slate-800'}`}>
-          <HiSearch className={`absolute left-3 w-5 h-5 transition-colors duration-200 ${searchFocused ? 'text-violet-400' : 'text-slate-500'}`} />
-          <input 
-            type="text" 
-            placeholder="Quick search across all stores..." 
-            value={searchFilter}
-            onChange={(e) => setSearchFilter(e.target.value)}
+        <div className={`w-full relative flex items-center rounded-xl transition-all duration-200 ${
+          searchFocused 
+            ? 'ring-2 ring-[#6366F1]/20 border-[#6366F1] bg-surface-saas' 
+            : 'bg-surface-saas/55 border border-border-saas'
+        }`}>
+          <HiSearch className={`absolute left-3.5 w-4.5 h-4.5 transition-colors ${searchFocused ? 'text-[#6366F1]' : 'text-text-muted'}`} />
+          <input
+            type="text"
+            placeholder="Search across stores, titles, IDs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
-            className="w-full pl-10 pr-4 py-2 bg-transparent text-slate-100 placeholder-slate-500 text-sm rounded-xl focus:outline-none"
+            className="w-full pl-10 pr-4 py-2 bg-transparent text-text-main placeholder-text-muted/60 text-xs rounded-xl focus:outline-none focus:ring-0"
           />
         </div>
       </div>
 
-      {/* Right Actions */}
-      <div className="flex items-center gap-4">
-        {/* Notifications Icon with Badge */}
+      {/* Actions: Notifications & Avatar */}
+      <div className="flex items-center gap-3">
+        
+        {/* Notification button and dropdown */}
         <div className="relative">
-          <motion.button 
+          <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="p-2 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-violet-500/30 hover:bg-slate-800/50 text-slate-300 hover:text-violet-400 transition-all cursor-pointer relative"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="p-2 rounded-xl bg-surface-saas/40 border border-border-saas hover:border-[#6366F1]/25 text-text-muted hover:text-text-main transition-all cursor-pointer relative"
           >
-            <HiBell className="w-5 h-5" />
-            {criticalIncidentsCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 w-4">
+            <HiBell className="w-4.5 h-4.5" />
+            {notifications.length > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 text-[9px] font-bold text-white items-center justify-center">
-                  {criticalIncidentsCount}
+                <span className="relative inline-flex rounded-full h-4.5 w-4.5 bg-red-500 text-[9px] font-bold text-white items-center justify-center">
+                  {notifications.length}
                 </span>
               </span>
             )}
-          </motion.button>
+          </button>
 
-          {/* Notifications Dropdown */}
           <AnimatePresence>
-            {showNotifications && (
-              <>
-                {/* Backdrop overlay to close */}
-                <div className="fixed inset-0 z-40" onClick={() => setShowNotifications(false)} />
-                
-                <motion.div 
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute right-0 mt-2.5 w-80 md:w-96 glass-panel-glow rounded-2xl p-4 z-50 text-left border border-slate-800"
-                >
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                    <h3 className="font-display font-semibold text-sm text-slate-200">Alerts & Notifications</h3>
-                    <span className="text-xs bg-red-500/20 text-red-400 font-bold px-2 py-0.5 rounded-full">
-                      {criticalIncidentsCount} Critical
-                    </span>
-                  </div>
-                  
-                  <div className="mt-3 space-y-2.5 max-h-72 overflow-y-auto pr-1">
-                    {activeIncidents.filter(inc => inc.severity === 'Critical' || inc.severity === 'High').slice(0, 4).map((inc) => (
-                      <div 
-                        key={inc.id} 
-                        className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-violet-500/20 transition-all flex flex-col gap-1"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className={`text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded ${inc.severity === 'Critical' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'}`}>
-                            {inc.severity}
-                          </span>
-                          <span className="text-[10px] text-slate-500">{inc.reportedTime}</span>
-                        </div>
-                        <h4 className="text-xs font-semibold text-slate-200 line-clamp-1">{inc.title}</h4>
-                        <p className="text-[11px] text-slate-400 line-clamp-2">{inc.description}</p>
-                      </div>
-                    ))}
-                    {activeIncidents.length === 0 && (
-                      <div className="py-8 text-center text-slate-500 text-xs">
-                        🛡️ All systems green. No active incidents.
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-3 pt-3 border-t border-slate-800 text-center">
-                    <button 
-                      onClick={() => setShowNotifications(false)}
-                      className="text-xs font-semibold text-violet-400 hover:text-violet-300 transition-colors w-full cursor-pointer"
-                    >
-                      Close Panel
-                    </button>
-                  </div>
-                </motion.div>
-              </>
-            )}
+            <NotificationPanel
+              isOpen={showNotifications}
+              onClose={() => setShowNotifications(false)}
+              notifications={notifications}
+              onClearNotification={onClearNotification}
+            />
           </AnimatePresence>
         </div>
 
-        {/* User profile avatar */}
-        <div className="flex items-center gap-2.5 border-l border-slate-800 pl-4">
-          <div className="relative group">
-            <motion.div 
-              className="w-9 h-9 rounded-xl overflow-hidden border border-violet-500/30 flex items-center justify-center bg-violet-600/10 cursor-pointer relative"
-              whileHover={{ scale: 1.05 }}
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" 
-                alt="HQ Controller Avatar"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
+        {/* Profile trigger button */}
+        <div className="flex items-center border-l border-border-saas pl-4">
+          <button
+            onClick={onOpenProfile}
+            className="flex items-center gap-2.5 p-1 rounded-xl hover:bg-surface-saas border border-transparent hover:border-border-saas text-left transition-all cursor-pointer group"
+          >
+            {/* Circular Avatar */}
+            <div className="relative shrink-0">
+              <img
+                src={profile.avatar}
+                alt={profile.name}
+                className="w-8 h-8 rounded-full object-cover border border-border-saas group-hover:border-[#6366F1]/30 transition-colors"
               />
-              {/* Fallback */}
-              <HiUserCircle className="w-full h-full text-violet-500 hidden group-error:block" />
-              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border border-slate-950 rounded-full" />
-            </motion.div>
-          </div>
-          <div className="hidden lg:flex flex-col text-left">
-            <span className="text-xs font-bold text-slate-200">Sarah Jenkins</span>
-            <span className="text-[10px] text-violet-400 font-semibold tracking-wider">Store Operations Manager</span>
-          </div>
+              <div className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 border border-surface-saas rounded-full" />
+            </div>
+            
+            {/* User Name & Role Badge with dropdown chevron */}
+            <div className="hidden sm:flex flex-col text-xs min-w-0 text-left">
+              <span className="font-bold text-text-main group-hover:text-[#6366F1] transition-colors block truncate leading-none">
+                {profile.name.split(' ')[0]}
+              </span>
+              <span className="text-[10px] text-text-muted group-hover:text-text-main transition-colors flex items-center gap-1 font-sans truncate leading-none mt-1">
+                <span>{profile.role}</span>
+                <HiChevronDown className="w-3 h-3 text-text-muted group-hover:text-text-main transition-colors shrink-0" />
+              </span>
+            </div>
+          </button>
         </div>
+
       </div>
+
     </header>
   );
 }

@@ -1,140 +1,191 @@
-export const mockIncidents = [
+export const STAFF_PROFILE = {
+  id: "EMP-2023-138",
+  name: "Saquib Sarfaraz",
+  shortName: "Saquib",
+  role: "Restaurant Staff",
+  store: "California Burrito - Saket",
+  avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG4uWukufSfuzz8yS9UUVDvb2Y9HrmvrLk7w&s",
+  joinDate: "January 2025",
+  email: "saquib@example.com",
+  performanceScore: "98.2%",
+  metrics: {
+    reported: 14,
+    resolved: 12,
+    avgResolutionTime: "3.2 Hours",
+    performanceScore: "98.2%"
+  },
+  achievements: [
+    { id: "ach-1", title: "Top Reporter", desc: "Highest volume of high-fidelity incident reports logged.", icon: "👁️" },
+    { id: "ach-2", title: "Fast Escalation", desc: "Immediate reporting of critical equipment failure.", icon: "⚡" },
+    { id: "ach-3", title: "Safety Champion", desc: "Consistently identifying facility safety risks.", icon: "🛡️" }
+  ],
+  activityFeed: [
+    { date: "2026-05-29", action: "Submitted new log: 'POS Counter 3 Payment Gateway Offline'" },
+    { date: "2026-05-28", action: "Completed safety checklist: 'Barista counter gasket replaced'" },
+    { date: "2026-05-25", action: "Flagged plumbing anomaly: 'Washroom floor drain leakage'" }
+  ]
+};
+
+export const MANAGER_PROFILE = {
+  id: "MGR-2023-138",
+  name: "Saquib Sarfaraz",
+  shortName: "Saquib",
+  role: "Operations Manager",
+  region: "Delhi NCR",
+  storesManaged: 12,
+  avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG4uWukufSfuzz8yS9UUVDvb2Y9HrmvrLk7w&s",
+  joinDate: "January 2025",
+  email: "saquib@example.com",
+  metrics: {
+    totalIncidents: 42,
+    resolutionRate: "94.5%",
+    criticalIssues: 2,
+    avgResponseTime: "2.8 Hours"
+  },
+  achievements: [
+    { id: "ach-1", title: "Operations Leader", desc: "Maintained standard SLAs across all 12 regional stores.", icon: "👔" },
+    { id: "ach-2", title: "100+ Incidents Resolved", desc: "Resolved over 100 system and kitchen equipment logs.", icon: "🏆" },
+    { id: "ach-3", title: "Top Performing Region", desc: "Maintained the highest safety and uptime region scores.", icon: "🌟" }
+  ],
+  activityFeed: [
+    { date: "2026-05-29", action: "Approved resolution notes: 'Quesadilla Press repair audit'" },
+    { date: "2026-05-28", action: "Reassigned POS hardware diagnostic to regional coordinator" },
+    { date: "2026-05-27", action: "Flagged refrigeration temperature alert at Connaught Place" }
+  ]
+};
+
+export const INITIAL_INCIDENTS = [
   {
     id: "INC-2026-001",
-    title: "POS Terminal Offline during Dinner Rush",
-    description: "Main checkout terminal is frozen and displaying a blue screen. Customer orders cannot be processed, resulting in long queues. We are currently using manual card readers, but it is slowing down service significantly.",
+    title: "POS Counter 3 Payment Gateway Offline",
+    description: "The primary touch-screen kiosk terminal #3 in the front counter is failing to authorize credit card swipes, triggering gateway timeout exceptions. We have diverted guests to counter #1, but it is causing a queue backing up to the entryway.",
     category: "POS Issue",
     severity: "High",
-    store: "McDonald's - Connaught Place",
+    store: "California Burrito - Saket",
     status: "Open",
-    reportedTime: "2 hours ago",
+    reportedTime: "20 mins ago",
     date: "2026-05-29",
-    aiSummary: "Main POS outage causing transactional delay and order backlogs during peak evening hours.",
-    actionPlan: [
-      "Reboot the main server terminal.",
-      "Check LAN and ethernet connections at the counter.",
-      "Call local IT support desk for a terminal replacement if hardware failure is confirmed."
-    ]
+    assignedManager: "Sarah Johnson",
+    timelineProgress: ["Reported"],
+    resolutionNotes: "Contacted corporate IT logistics. Sourcing payment hardware gateway diagnostics.",
+    createdDate: "2026-05-29T19:30:00.000Z",
+    aiSummary: "Front payment terminal checkout delay due to merchant credit-card authorization latency."
   },
   {
     id: "INC-2026-002",
-    title: "Walk-in Freezer Temperature Spike",
-    description: "The primary walk-in freezer temperature has risen to -5°C (should be below -18°C). A high-temperature alert was triggered. There is a high risk of food spoilage (approx. $3,000 worth of frozen inventory) if not resolved quickly.",
+    title: "Primary Walk-in Cooler Compressor Failure",
+    description: "The digital temperature display on the walk-in cooler shows 14°C, which is well above the safe threshold of 4°C. Perishable stock (including taco ingredients and dairy products worth approximately $3,500) will be compromised if not resolved immediately.",
     category: "Kitchen Equipment",
     severity: "Critical",
-    store: "Starbucks - Indiranagar",
-    status: "In Progress",
-    reportedTime: "45 mins ago",
-    date: "2026-05-29",
-    aiSummary: "Critical freezer cooling failure threatening immediate perishable food safety standards.",
-    actionPlan: [
-      "Move high-value perishables to secondary chest freezers.",
-      "Ensure the freezer door seal is fully closed and free of ice blockages.",
-      "Contact emergency refrigeration technician (Vendor: CoolTech)."
-    ]
-  },
-  {
-    id: "INC-2026-003",
-    title: "Customer Slip and Fall Near Soda Fountain",
-    description: "A customer slipped on a wet patch near the self-serve beverage counter. No warning sign was displayed. The customer was shaken but refused medical attention. We took down their details and filed an initial incident statement.",
-    category: "Facility/Safety",
-    severity: "High",
-    store: "Domino's - Bandra West",
-    status: "Open",
-    reportedTime: "3 hours ago",
-    date: "2026-05-29",
-    aiSummary: "Customer slip hazard due to liquid spill; potential liability issue; yellow slip-warning sign absent.",
-    actionPlan: [
-      "Immediately clean and dry the affected floor area.",
-      "Deploy 'Wet Floor' high-visibility cones.",
-      "Obtain security footage backup for the incident duration."
-    ]
-  },
-  {
-    id: "INC-2026-004",
-    title: "Delay in Bread and Patty Supplier Delivery",
-    description: "The daily supply truck did not arrive at its scheduled 6:00 AM slot. We are running extremely low on standard buns and taco shells. If the delivery doesn't arrive by 12:00 PM, we will have to temporarily remove core menu items.",
-    category: "Supply Chain",
-    severity: "Medium",
-    store: "California Burrito - Jubilee Hills",
-    status: "In Progress",
-    reportedTime: "5 hours ago",
-    date: "2026-05-29",
-    aiSummary: "Supply chain disruption leading to potential stockouts of core ingredients for the lunch shift.",
-    actionPlan: [
-      "Call logistics dispatch officer for the truck ETA.",
-      "Check inventory of nearby sister branches for emergency stock transfer.",
-      "Prepare staff to cross-sell alternative menu items if shortages occur."
-    ]
-  },
-  {
-    id: "INC-2026-005",
-    title: "Espresso Machine Steam Wand Leak",
-    description: "The steam wand on Group 2 of our La Marzocco machine has a continuous hiss and is dripping hot water, causing a minor safety hazard for baristas. Speed of coffee service is slightly affected, but Group 1 is fully functional.",
-    category: "Kitchen Equipment",
-    severity: "Medium",
-    store: "Starbucks - Connaught Place",
-    status: "Resolved",
-    reportedTime: "Yesterday",
-    date: "2026-05-28",
-    aiSummary: "Minor valve leak in espresso machine group head; successfully repaired by on-site lead.",
-    actionPlan: [
-      "Turn off steam valve and bleed the pressure wand.",
-      "Replace the worn-out silicone gasket and steam seal ring.",
-      "Test steam pressure at 1.5 bar to confirm full repair."
-    ]
-  },
-  {
-    id: "INC-2026-006",
-    title: "Understaffed During Weekend Rush",
-    description: "Three kitchen crew members called in sick for the Saturday night shift. We were short-staffed during our highest volume period. Order delivery times exceeded 20 minutes, leading to several negative reviews.",
-    category: "Staffing",
-    severity: "Medium",
-    store: "McDonald's - Indiranagar",
-    status: "Resolved",
-    reportedTime: "4 days ago",
-    date: "2026-05-25",
-    aiSummary: "Operational slowdown due to acute staff absenteeism during peak customer demand hours.",
-    actionPlan: [
-      "Request cover staff from standby rosters.",
-      "Provide discount vouchers to waiting customers as service recovery.",
-      "Manager stepped in to help on the assembly line."
-    ]
-  },
-  {
-    id: "INC-2026-007",
-    title: "Sewer Backup in Back Kitchen",
-    description: "Gray water is backing up through the floor drain in the dishwashing station. There is a strong odor and standing water. This violates sanitation guidelines, and we have paused kitchen operations until a plumber arrives.",
-    category: "Facility/Safety",
-    severity: "Critical",
-    store: "California Burrito - Connaught Place",
+    store: "California Burrito - Saket",
     status: "In Progress",
     reportedTime: "1 hour ago",
     date: "2026-05-29",
-    aiSummary: "Critical sanitation hazard with drain backup forcing temporary closure of kitchen station.",
-    actionPlan: [
-      "Halt dishwashing and isolate water lines.",
-      "Erect barriers to prevent water from reaching food prep areas.",
-      "Contact emergency drain cleaners (Vendor: RapidDrain Specialists)."
-    ]
+    assignedManager: "Sarah Johnson",
+    timelineProgress: ["Reported", "Under Review", "In Progress"],
+    resolutionNotes: "IT and maintenance technician dispatched. Moving high-value ingredients to backup chest freezers.",
+    createdDate: "2026-05-29T18:45:00.000Z",
+    aiSummary: "Critical compressor cooling defect. Urgent HVAC repair required."
   },
   {
-    id: "INC-2026-008",
-    title: "Double Charging Issue on Digital Kiosk",
-    description: "Several customers reported that they were charged twice on their credit cards while ordering through Kiosk #3. The kiosk successfully generated only one order ticket but took two transactions from the gateway.",
-    category: "POS Issue",
+    id: "INC-2026-003",
+    title: "Slipping Hazard Near Self-Serve Beverage Dispenser",
+    description: "A minor leak from the soda fountain ice dispenser is causing water to accumulate on the tiles. No warnings signs are visible in the immediate cleaning utility locker.",
+    category: "Facility/Safety",
     severity: "High",
-    store: "McDonald's - Bandra West",
-    status: "Open",
+    store: "California Burrito - Connaught Place",
+    status: "Under Review",
     reportedTime: "3 hours ago",
     date: "2026-05-29",
-    aiSummary: "Payment gateway integration bug causing duplicate charges on self-service kiosk.",
-    actionPlan: [
-      "Deactivate kiosk #3 and post a 'Temporary Out of Service' sticker.",
-      "Compile transaction logs and submit to payment gateway provider.",
-      "Notify corporate accounting to initiate manual refunds for affected customers."
-    ]
+    assignedManager: "Amit Sharma (District Lead)",
+    timelineProgress: ["Reported", "Under Review"],
+    resolutionNotes: "Mop deployed. 'Wet Floor' high-visibility signage placed at fountain.",
+    createdDate: "2026-05-29T16:30:00.000Z",
+    aiSummary: "Localized spill water puddle near drinks bar creating immediate guest hazard."
+  },
+  {
+    id: "INC-2026-004",
+    title: "Secondary Quesadilla Press Failure",
+    description: "Grill Press heating element is failing to distribute thermal heating evenly. Quesadillas are taking twice as long to prep, backing up online delivery order speeds.",
+    category: "Kitchen Equipment",
+    severity: "Medium",
+    store: "California Burrito - Noida",
+    status: "Resolved",
+    reportedTime: "Yesterday",
+    date: "2026-05-28",
+    assignedManager: "Sarah Johnson",
+    timelineProgress: ["Reported", "Under Review", "In Progress", "Resolved"],
+    resolutionNotes: "Coil burner replaced by kitchen maintenance team. Platen distributed evenly at 180°C.",
+    createdDate: "2026-05-28T11:00:00.000Z",
+    aiSummary: "Burner grid thermal coil malfunction. Heating press fully repaired."
+  },
+  {
+    id: "INC-2026-005",
+    title: "Daily Avocado Shipment Logistics Interruption",
+    description: "The cold-cargo cargo truck did not arrive for its morning delivery slot. Gurgaon branch is out of fresh avocados and cannot offer premium guacamole sides for the lunch shift.",
+    category: "Supply Chain",
+    severity: "Critical",
+    store: "California Burrito - Gurgaon",
+    status: "In Progress",
+    reportedTime: "4 hours ago",
+    date: "2026-05-29",
+    assignedManager: "Priya Nair (Compliance)",
+    timelineProgress: ["Reported", "Under Review", "In Progress"],
+    resolutionNotes: "Sourcing backup delivery truck from regional warehouse to complete stock transfer.",
+    createdDate: "2026-05-29T15:00:00.000Z",
+    aiSummary: "Supplier delivery cargo delay leading to stock shortages of avocados."
+  },
+  {
+    id: "INC-2026-006",
+    title: "Kitchen Staff Shift Shortage",
+    description: "Three line baristas reported sick simultaneously for the Friday evening shift. Average prep speeds dropped, resulting in delivery delays exceeding 25 minutes.",
+    category: "Staffing",
+    severity: "Medium",
+    store: "California Burrito - Noida",
+    status: "Resolved",
+    reportedTime: "3 days ago",
+    date: "2026-05-26",
+    assignedManager: "Amit Sharma (District Lead)",
+    timelineProgress: ["Reported", "Under Review", "In Progress", "Resolved"],
+    resolutionNotes: "Dispatched stand-by operators from neighboring Connaught Place hub to cover shift gaps.",
+    createdDate: "2026-05-26T20:00:00.000Z",
+    aiSummary: "Shift vacancy backlog. Managed successfully by drafting stand-by crews."
   }
+];
+
+export const AI_OPERATIONAL_INSIGHTS = [
+  {
+    id: "ins-1",
+    insight: "Kitchen equipment incidents are up by 24% across Delhi NCR branches.",
+    confidence: "91%",
+    severity: "High",
+    action: "Schedule prophylactic heater and compressor diagnostic cycles across North India outlets.",
+    details: "Thermostat anomalies recorded from 3 primary platen tortilla presses during morning audits."
+  },
+  {
+    id: "ins-2",
+    insight: "Delivery transit delays are highest during evening rush hours.",
+    confidence: "86%",
+    severity: "Medium",
+    action: "Optimize pick-up terminal staging layouts to shave off 4 minutes from dispatch delays.",
+    details: "Average packaging latencies rose to 12 minutes between 18:00 and 20:00."
+  },
+  {
+    id: "ins-3",
+    insight: "Gurgaon store requires attention due to repeated inventory issues.",
+    confidence: "78%",
+    severity: "High",
+    action: "Initiate warehouse supplier audit to resolve avocado logistics sync anomalies.",
+    details: "Avocado deliveries arrived >2 hours late on 3 distinct occasions in the past 10 days."
+  }
+];
+
+export const STORES = [
+  "California Burrito - Saket",
+  "California Burrito - Noida",
+  "California Burrito - Gurgaon",
+  "California Burrito - Connaught Place",
+  "California Burrito - Indiranagar"
 ];
 
 export const CATEGORIES = [
@@ -148,15 +199,4 @@ export const CATEGORIES = [
 
 export const SEVERITIES = ["Low", "Medium", "High", "Critical"];
 
-export const STORES = [
-  "McDonald's - Connaught Place",
-  "McDonald's - Indiranagar",
-  "McDonald's - Bandra West",
-  "Starbucks - Indiranagar",
-  "Starbucks - Connaught Place",
-  "Domino's - Bandra West",
-  "California Burrito - Jubilee Hills",
-  "California Burrito - Connaught Place"
-];
-
-export const STATUSES = ["Open", "In Progress", "Resolved"];
+export const STATUSES = ["Open", "Under Review", "In Progress", "Resolved"];

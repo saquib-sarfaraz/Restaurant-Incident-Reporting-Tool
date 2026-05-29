@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-cyber: #050816;
+  --color-card-cyber: #0b1220;
+  --color-neon-primary: #8b5cf6;
+  --color-neon-secondary: #00f5ff;
+  --color-neon-danger: #ff4d6d;
+  --color-neon-success: #00ff94;
+  --color-neon-warning: #ffb703;
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050816;
+  border-left: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 245, 255, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 255, 0.6);
+  box-shadow: 0 0 10px #00f5ff;
+}
+
+/* Global resets & background grid */
+body {
+  background-color: #050816;
+  color: #f8fafc;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  
+  /* Cybernetic fine scan grid background */
+  background-image: 
+    linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Glowing Neon Elements */
+.neon-panel-primary {
+  background: rgba(11, 18, 32, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(139, 92, 246, 0.2);
+}
+
+.neon-panel-secondary {
+  background: rgba(11, 18, 32, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(0, 245, 255, 0.2);
+}
+
+.neon-panel-danger {
+  background: rgba(11, 18, 32, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 77, 109, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(255, 77, 109, 0.2);
+}
+
+.neon-panel-success {
+  background: rgba(11, 18, 32, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 255, 148, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(0, 255, 148, 0.2);
+}
+
+/* Cyber Matrix scanning lines */
+.cyber-scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-scanlines::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 245, 255, 0.05) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 4px, 6px 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Futuristic digital grid and dots */
+.cyber-dot {
+  width: 4px;
+  height: 4px;
+  background-color: #00f5ff;
+  box-shadow: 0 0 6px #00f5ff;
+  border-radius: 50%;
+}
+
+.cyber-input {
+  background: rgba(5, 8, 22, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-input:focus {
+  outline: none;
+  border-color: #00f5ff;
+  background: rgba(5, 8, 22, 0.95);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Glow gradient texts */
+.text-glow-primary {
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.text-glow-secondary {
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.6), 0 0 20px rgba(0, 245, 255, 0.3);
+}
+
+.text-glow-danger {
+  text-shadow: 0 0 10px rgba(255, 77, 109, 0.5), 0 0 20px rgba(255, 77, 109, 0.3);
+}
+
+.gradient-hud {
+  background: linear-gradient(180deg, rgba(11, 18, 32, 0.95) 0%, rgba(5, 8, 22, 0.98) 100%);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+}
+
+/* Matrix scanning keyframe pulse */
+@keyframes cyberScan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.cyber-scanner-bar {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, #00f5ff, transparent);
+  box-shadow: 0 0 8px #00f5ff;
+  animation: cyberScan 3s linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Standard properties for background clip */
+.gradient-text-primary {
+  background: linear-gradient(135deg, #c084fc 0%, #8b5cf6 50%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-secondary {
+  background: linear-gradient(135deg, #a5f3fc 0%, #00f5ff 50%, #0891b2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Floating label styles */
+.floating-label-group {
+  position: relative;
+}
+
+.floating-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+  transform-origin: left top;
+}
+
+.floating-label-active {
+  top: 0;
+  transform: translateY(-50%) scale(0.8);
+  background-color: #0b1220;
+  padding: 0 6px;
+  color: #00f5ff;
+  text-shadow: 0 0 4px rgba(0, 245, 255, 0.2);
+}
+
+/* Recharts Tooltip styling */
+.recharts-tooltip-cursor {
+  fill: rgba(0, 245, 255, 0.02) !important;
+}
